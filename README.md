@@ -235,6 +235,3 @@ uv run agentflow --project-state-dir /path/to/state --chat
 - [Thiết kế giới hạn token Anthropic](docs/architecture/anthropic-token-limiter.md)
 - [Ví dụ MCP tùy chỉnh](examples/custom-tools-mcp/README.md)
 
-## Giấy phép
-
-AgentFlow sử dụng Apache License 2.0. Nội dung giấy phép được lưu tại [`third_party/APACHE-2.0.txt`](third_party/APACHE-2.0.txt).
