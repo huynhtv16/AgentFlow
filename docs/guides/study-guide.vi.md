@@ -59,7 +59,7 @@ CLI và cấu hình trang tài liệu. Tên kỹ thuật còn xuất hiện tron
 entry point, workspace npm, test, lockfile và script build. Cần quyết định phạm
 vi đổi tên trước khi sửa đồng loạt.
 
-`agentflow/server/prebuilt/` và `frontend/vsc/dist/` chứa sản phẩm build sẵn.
+`src/agentflow/server/prebuilt/` và `frontend/vsc/dist/` chứa sản phẩm build sẵn.
 Khi thay đổi giao diện hoặc extension, cần build lại từ mã nguồn tương ứng.
 
 Bản cá nhân nên có tên riêng và mô tả rõ phần tùy biến để học tập, đồng thời

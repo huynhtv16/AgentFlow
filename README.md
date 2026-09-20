@@ -34,7 +34,7 @@ Flow minh họa hoàn chỉnh trên project Calculator:
 
 ```text
 AgentFlow/
-├── agentflow/          # Backend Python, agent, tool, API và database
+├── src/agentflow/      # Backend Python, agent, tool, API và database
 │   ├── agents/         # Nghiên cứu, lập kế hoạch, triển khai
 │   ├── tools/          # Công cụ của agent
 │   ├── prompts/        # Prompt theo từng luồng
@@ -45,7 +45,7 @@ AgentFlow/
 │   ├── web/            # Ứng dụng Vite
 │   └── vsc/            # Extension VS Code
 ├── tests/              # Kiểm thử tự động
-├── docs/               # Docusaurus và OpenAPI
+├── docs/               # API, hướng dẫn, kiến trúc và ảnh demo
 └── examples/           # Ví dụ tích hợp
 ```
 
