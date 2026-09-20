@@ -132,4 +132,4 @@ AgentFlow tạo `.agentflow/` trong dự án đang làm việc. Thư mục này 
 
 ## Giấy phép
 
-AgentFlow được phát hành theo Apache License 2.0. Xem tệp `LICENSE` để biết điều khoản chi tiết.
+AgentFlow được phát hành theo Apache License 2.0. Điều khoản được lưu trong `third_party/APACHE-2.0.txt`.
