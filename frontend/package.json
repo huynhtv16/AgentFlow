@@ -9,6 +9,6 @@
   "scripts": {
     "install-all": "npm install",
     "dev:web": "npm --workspace @agentflow/web run dev",
-    "build:prebuilt": "rm -rf ../agentflow/server/prebuilt && npm --workspace @agentflow/web run build -- --outDir ../../agentflow/server/prebuilt"
+    "build:prebuilt": "rm -rf ../src/agentflow/server/prebuilt && npm --workspace @agentflow/web run build -- --outDir ../../src/agentflow/server/prebuilt"
   }
 }
