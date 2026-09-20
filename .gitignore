@@ -22,10 +22,10 @@ node_modules/
 /.vscode
 /frontend/common/dist/
 /.ra-prompt
-agentflow/__main__.build
-agentflow/__main__.dist
-agentflow/__main__.onefile-build
-agentflow/__main__.exe
+src/agentflow/__main__.build
+src/agentflow/__main__.dist
+src/agentflow/__main__.onefile-build
+src/agentflow/__main__.exe
 .github
 .githooks
 .qodo

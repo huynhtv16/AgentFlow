@@ -635,10 +635,6 @@ def parse_arguments(args=None):
         help="Directory to store project state (database and logs). By default, a .agentflow directory is created in the current working directory.",
     )
 
-    # extract-changelog
-    parser_extract_changelog = subparsers.add_parser("extract-changelog", help="Extract changelog entries for a specific version from CHANGELOG.md.")
-    parser_extract_changelog.add_argument("version", type=str, help="The version string to extract (e.g., 0.30.0).")
-
     # Update epilog with examples including new subcommands
     parser.epilog = """
 Examples:
@@ -647,7 +643,6 @@ Examples:
   agentflow last-cost
   agentflow extract-plan 123
   agentflow create-migration add_new_feature
-  agentflow extract-changelog 0.25.0
     """
 
     if args is None:
@@ -670,7 +665,7 @@ Examples:
     if not parsed_args.command or parsed_args.command not in [
         "last-cost", "all-costs", "extract-plan", "extract-last-plan", 
         "extract-last-research-notes", "generate-openapi", "create-migration", 
-        "migrate", "migration-status", "extract-changelog"
+        "migrate", "migration-status"
     ]:
         if parsed_args.message and parsed_args.msg_file:
             parser.error("Cannot use both --message and --msg-file")
@@ -915,39 +910,6 @@ def handle_migration_status(args):
             console.print(f"- {p}")
     sys.exit(0)
 
-def handle_extract_changelog(args):
-    from agentflow.scripts.extract_changelog import extract_version_content # Use the core function
-    from pathlib import Path
-
-    version = args.version
-    # CHANGELOG.md is assumed to be in project root, 3 levels up from __main__.py's script dir
-    # This path logic might need adjustment if agentflow is installed as a package.
-    # For development: Path(__file__).parent.parent.parent / "CHANGELOG.md"
-    # For installed package: This needs a robust way to find CHANGELOG.md relative to package or CWD.
-    # Assuming CWD for now if run from project root.
-    changelog_path = Path("CHANGELOG.md") # Simpler assumption, user runs from project root
-    if not changelog_path.exists():
-        # Try relative to __file__ as a fallback (might work in some editable installs)
-        script_dir_changelog_path = Path(__file__).resolve().parents[2] / "CHANGELOG.md"
-        if script_dir_changelog_path.exists():
-            changelog_path = script_dir_changelog_path
-        else:
-            console.print(f"Error: Could not find {changelog_path} or {script_dir_changelog_path}", file=sys.stderr)
-            sys.exit(1)
-            
-    try:
-        content = changelog_path.read_text()
-        version_content = extract_version_content(content, version)
-        console.print(version_content)
-    except FileNotFoundError:
-        console.print(f"Error: Could not find {changelog_path}", file=sys.stderr)
-        sys.exit(1)
-    except ValueError as e: # Raised by extract_version_content if version not found
-        console.print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        console.print(f"Error reading changelog or extracting content: {e}", file=sys.stderr)
-        sys.exit(1)
     sys.exit(0)
 
 
@@ -1136,8 +1098,6 @@ def main():
             handle_migrate(args)
         elif args.command == "migration-status":
             handle_migration_status(args)
-        elif args.command == "extract-changelog":
-            handle_extract_changelog(args)
         # Add other command dispatches here
         # If a command was handled, the handler function should sys.exit()
         # If we reach here after a command, it means it wasn't a script command or didn't exit.

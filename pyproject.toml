@@ -26,6 +26,7 @@ dependencies = [
     "langchain-ollama>=0.3.0",
     "langchain-google-genai>=2.1.1",
     "langchain-fireworks>=0.2.8",
+    "fireworks-ai>=0.17.0,<1.0.0",
     "langchain-groq>=0.3.1",
     "langgraph>=0.3.20",
     "langgraph-checkpoint>=2.0.23",
@@ -73,7 +74,10 @@ dev = [
 agentflow = "agentflow.__main__:main"
 
 [tool.hatch.version]
-path = "agentflow/__version__.py"
+path = "src/agentflow/__version__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["agentflow"]
+packages = ["src/agentflow"]
+
+[tool.pytest.ini_options]
+markers = ["parametrize: mark test cases with different parameters"]
