@@ -2,11 +2,10 @@ name: Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [main]
   pull_request:
-    branches: [ master ]
+    branches: [main]
 
-# Cancel any in-progress job or run
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -28,7 +27,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
         
-    - name: Setup and Run Tests
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Run tests
       run: |
-        make setup-dev
-        make test
+        uv run pytest

@@ -56,22 +56,13 @@ jobs:
         run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       # Step 8: Extract Changelog for the Version
-      - name: Extract Changelog for Version
-        id: changelog
-        run: |
-          python agentflow/scripts/extract_changelog.py ${{ env.version }} > release_notes.txt
-          echo "changelog<<EOF" >> $GITHUB_ENV
-          cat release_notes.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       # Step 9: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
           name: Release v${{ env.version }}
-          body: |
-            ${{ env.changelog }}
+          generate_release_notes: true
           files: |
             dist/*.tar.gz
             dist/*.whl
