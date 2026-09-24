@@ -228,10 +228,4 @@ AgentFlow tạo thư mục `.agentflow/` trong dự án đang làm việc. Thư 
 uv run agentflow --project-state-dir /path/to/state --chat
 ```
 
-## Tài liệu
-
-- [OpenAPI specification](docs/api/openapi.yml)
-- [Hướng dẫn tìm hiểu dự án](docs/guides/study-guide.vi.md)
-- [Thiết kế giới hạn token Anthropic](docs/architecture/anthropic-token-limiter.md)
-- [Ví dụ MCP tùy chỉnh](examples/custom-tools-mcp/README.md)
 
