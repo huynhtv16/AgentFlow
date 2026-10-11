@@ -114,19 +114,27 @@ def is_claude_37(model: str) -> bool:
     return any(pattern in model for pattern in patterns)
 
 
-def should_use_react_agent(model: BaseChatModel) -> bool:
+def should_use_react_agent(
+    model: BaseChatModel,
+    *,
+    provider: Optional[str] = None,
+    model_name: Optional[str] = None,
+) -> bool:
     """
     Determine if we should use create_react_agent vs CiaynAgent based on model capabilities.
 
     Args:
         model: The language model to check
+        provider: Configured provider. Used when model metadata does not expose one.
+        model_name: Configured model name. Used instead of inspecting the model when
+            provided.
 
     Returns:
         bool: True if we should use create_react_agent, False if we should use CiaynAgent
     """
     use_react_agent = False
-    model_name = get_model_name_from_chat_model(model)
-    provider = get_provider_from_chat_model(model)
+    model_name = model_name or get_model_name_from_chat_model(model)
+    provider = get_provider_from_chat_model(model) or provider
 
     try:
         supports_function_calling = litellm.supports_function_calling(

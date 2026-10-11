@@ -142,6 +142,29 @@ def test_should_use_react_agent_config_override(mock_models_params, mock_get_con
 
 
 @patch('litellm.supports_function_calling')
+@patch('agentflow.model_detection.models_params')
+def test_should_use_react_agent_uses_explicit_config(mock_models_params, mock_supports_function_calling):
+    """Configured model data should work even when the chat model has no metadata."""
+    model = MagicMock(spec=BaseChatModel)
+    mock_models_params.get.return_value = {
+        "claude-2": {
+            "default_backend": AgentBackendType.CREATE_REACT_AGENT
+        }
+    }
+    mock_supports_function_calling.return_value = False
+
+    assert should_use_react_agent(
+        model,
+        provider="anthropic",
+        model_name="claude-2",
+    ) is True
+    mock_supports_function_calling.assert_called_once_with(
+        model="claude-2",
+        custom_llm_provider="anthropic",
+    )
+
+
+@patch('litellm.supports_function_calling')
 def test_should_use_react_agent_error_handling(mock_supports_function_calling):
     """Test should_use_react_agent error handling."""
     # Setup

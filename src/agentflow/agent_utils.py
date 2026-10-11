@@ -183,7 +183,11 @@ def create_agent(
             get_model_token_limit(config, agent_type, model) or DEFAULT_TOKEN_LIMIT
         )
 
-        use_react_agent = should_use_react_agent(model)
+        use_react_agent = should_use_react_agent(
+            model,
+            provider=config.get("provider"),
+            model_name=config.get("model"),
+        )
 
         if use_react_agent:
             logger.debug(
