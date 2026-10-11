@@ -44,6 +44,14 @@ def test_config_endpoint(client):
     assert "port" in response.json()
 
 
+def test_websocket_heartbeat():
+    """The server responds to the browser heartbeat without broadcasting it."""
+    with TestClient(app) as websocket_client:
+        with websocket_client.websocket_connect("/v1/ws") as websocket:
+            websocket.send_text("ping")
+            assert websocket.receive_text() == "pong"
+
+
 def test_api_documentation(client):
     """Test that the OpenAPI documentation includes the sessions API."""
     response = client.get("/openapi.json")

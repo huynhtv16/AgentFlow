@@ -27,4 +27,4 @@ class ConnectionManager:
                 await connection.send_text(message)
             except Exception as e:
                 logger.error(f"Failed to send message to client {connection.client}: {e}")
-                # Disconnect logic should handle cleanup, don't remove here
+                self.disconnect(connection)
