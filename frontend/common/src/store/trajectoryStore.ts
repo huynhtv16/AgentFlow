@@ -15,6 +15,7 @@ import {
   safeBackendToTrajectory,
   getSampleTrajectory // Assuming this might be used elsewhere, keep it for now
 } from '../models/trajectory';
+import { buildApiUrl } from '../utils/serverUrl';
 
 /**
  * Trajectory store state interface
@@ -84,7 +85,7 @@ export const useTrajectoryStore = create<TrajectoryStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const { host, port } = useClientConfigStore.getState();
-      const response = await fetch(`http://${host}:${port}/v1/trajectory`); // Hypothetical endpoint
+      const response = await fetch(buildApiUrl('/v1/trajectory', { host, port })); // Hypothetical endpoint
       if (!response.ok) throw new Error(`Failed to fetch trajectories: ${response.statusText}`);
       const data = await response.json();
       const trajectories = data.map(safeBackendToTrajectory).filter(Boolean) as Trajectory[];
@@ -107,7 +108,7 @@ export const useTrajectoryStore = create<TrajectoryStore>((set) => ({
     set({ isLoading: true, error: null, trajectories: [] }); // Clear previous trajectories on new fetch
     try {
       const { host, port } = useClientConfigStore.getState();
-      const url = `http://${host}:${port}/v1/session/${sessionId}/trajectory`;
+      const url = buildApiUrl(`/v1/session/${sessionId}/trajectory`, { host, port });
       console.log(`[TrajectoryStore] Making API request to: ${url}`);
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Failed to fetch trajectories for session ${sessionId}: ${response.statusText} (Status: ${response.status})`);

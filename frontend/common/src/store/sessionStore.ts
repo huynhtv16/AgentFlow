@@ -20,6 +20,7 @@ import {
 } from '../models/session';
 import { useClientConfigStore } from './clientConfigStore';
 import { spawnAgent, ApiError } from '../utils/api'; // Keep ApiError if used
+import { buildApiUrl } from '../utils/serverUrl';
 
 /**
  * Interface for tracking the state of a message being composed for a new session
@@ -149,7 +150,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
 
       // Fetch sessions from the API
       // Ensure API endpoint returns the new 'status' field
-      const response = await fetch(`http://${host}:${port}/v1/session`);
+      const response = await fetch(buildApiUrl('/v1/session', { host, port }));
       if (!response.ok) throw new Error(`Failed to fetch sessions: ${response.statusText}`);
 
       const data = await response.json();

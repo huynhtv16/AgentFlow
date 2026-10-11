@@ -14,6 +14,7 @@ import { useSessionStore, useClientConfigStore, useTrajectoryStore } from '../st
 import { BackendTrajectory, safeBackendToTrajectory } from '../models/trajectory';
 import { WebSocketConnection, WebSocketConfig } from '../websocket/connection';
 import { AgentSession, SessionStatus, safeBackendToAgentSession } from '../models/session';
+import { buildApiUrl, buildWebSocketUrl } from '../utils/serverUrl';
 
 // Helper function for theme setup
 const setupTheme = () => {
@@ -59,7 +60,7 @@ const SessionHaltButton = ({ session }: { session: AgentSession }) => {
 
     console.log(`[SessionHaltButton] Halting session ${id}`);
     // Call the API to halt the session
-    fetch(`http://${host}:${port}/v1/session/${id}`, {
+    fetch(buildApiUrl(`/v1/session/${id}`, { host, port }), {
       method: 'DELETE',
     })
       .then((response) => {
@@ -169,10 +170,11 @@ export const DefaultAgentScreen: React.FC = () => {
   useEffect(() => {
     if (wsConnectionRef.current) return;
 
-    const url = `ws://${host}:${port}/v1/ws`;
+    const url = buildWebSocketUrl('/v1/ws', { host, port });
     const config: WebSocketConfig = {
       url,
       onMessage: handleWebSocketMessage,
+      heartbeatIntervalMs: 30_000,
     };
 
     console.log(`Attempting WebSocket connection to ${url} with message handler`);

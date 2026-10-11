@@ -13,6 +13,7 @@ import {
   ClientConfigSchema,
   validateClientConfig
 } from '../models/clientConfig';
+import { buildApiUrl } from '../utils/serverUrl';
 
 /**
  * Client configuration state interface
@@ -75,12 +76,13 @@ type ClientConfigStore = ClientConfigState & ClientConfigActions;
  * - `host`: Defaults to the current window's hostname, or 'localhost' if unavailable.
  * - `port`: Determines the port based on the environment:
  *   - In `vite dev` server, it uses the `VITE_BACKEND_PORT` environment variable, defaulting to `1818` if not set.
- *   - In `vite build` (prebuilt production), it uses the current `window.location.port`, defaulting to `1818` if unavailable.
- *
- *   TODO: Do not rely on ts-ignore
+ *   - In `vite build` (prebuilt production), it uses the current browser port,
+ *     including the standard port for HTTP or HTTPS when the URL omits it.
  */
-// @ts-ignore
-const backend_port = import.meta.env.DEV ? Number.parseInt(import.meta.env.VITE_BACKEND_PORT || '1818') : Number.parseInt(window?.location?.port || '1818');
+const defaultBrowserPort = window.location.protocol === 'https:' ? 443 : 80;
+const backend_port = import.meta.env.DEV
+  ? Number.parseInt(import.meta.env.VITE_BACKEND_PORT || '1818')
+  : Number.parseInt(window.location.port || String(defaultBrowserPort));
 const DEFAULT_CONFIG = ClientConfigSchema.parse({
   host: window?.location?.hostname || 'localhost',
   port: backend_port
@@ -126,7 +128,7 @@ export const useClientConfigStore = create<ClientConfigStore>((set: any, get: an
     
     try {
       const { host, port } = get();
-      const response = await fetch(`http://${host}:${port}/config`);
+      const response = await fetch(buildApiUrl('/config', { host, port }));
       
       if (!response.ok) {
         throw new Error(`Failed to fetch configuration: ${response.statusText}`);

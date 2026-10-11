@@ -3,6 +3,7 @@
  */
 
 import { useClientConfigStore } from '../store/clientConfigStore';
+import { buildApiUrl } from './serverUrl';
 
 /**
  * Interface for spawn agent request parameters
@@ -67,7 +68,7 @@ export async function spawnAgent(params: SpawnAgentParams): Promise<SpawnAgentRe
   const { host, port } = useClientConfigStore.getState();
   
   try {
-    const response = await fetch(`http://${host}:${port}/v1/spawn-agent`, {
+    const response = await fetch(buildApiUrl('/v1/spawn-agent', { host, port }), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
