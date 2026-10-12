@@ -10,11 +10,10 @@ import { CopyToClipboardButton } from '../ui/CopyToClipboardButton'; // Import t
 
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Using a common style, adjust if needed
-
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { MarkdownCodeBlock } from '../ui/MarkdownCodeBlock';
 // --- End New Imports ---
+
+const markdownComponents: Components = { code: MarkdownCodeBlock };
 
 
 interface MemoryOperationTrajectoryProps {
@@ -57,53 +56,6 @@ export const MemoryOperationTrajectory: React.FC<MemoryOperationTrajectoryProps>
     return types[toolName] || toolName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); // Capitalize title
 
   };
-
-  // --- Define Custom Components for Markdown (copied & adapted) ---
-
-  const components: Components = {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-      code({ className, children, ...props }) { // Removed node and inline destructuring
-
-        const match = /language-(\w+)/.exec(className || '');
-        // Handle potential array children from parsing, join them, and trim trailing newline
-
-        const codeString = (Array.isArray(children) ? children.join('') : String(children))
-                          .replace(/\n$/, '');
-
-        // Check only for match to determine if it's a highlighted block
-
-        if (match) {
-          // For block code with language
-
-          return (
-            <SyntaxHighlighter
-              style={vscDarkPlus} // Apply the chosen style
-
-              language={match[1]}
-              PreTag="div"
-              // Added basic styling matching typical code blocks
-
-              className="text-sm rounded my-2"
-            >
-              {codeString}
-            </SyntaxHighlighter>
-          );
-        } else {
-          // For inline code or block code without language
-
-          return (
-            // Apply basic inline code styling
-
-            <code className={`bg-muted px-1 py-0.5 rounded text-sm font-mono ${className || ''}`}>
-              {children}
-            </code>
-          );
-        }
-      },
-    }
-  // --- End Custom Components ---
-
 
   // Extract relevant data
 
@@ -150,7 +102,7 @@ export const MemoryOperationTrajectory: React.FC<MemoryOperationTrajectoryProps>
             <div className="prose prose-sm dark:prose-invert max-w-none break-words mt-2">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                components={components} // Use the defined custom components
+                components={markdownComponents}
 
               >
                 {factText}

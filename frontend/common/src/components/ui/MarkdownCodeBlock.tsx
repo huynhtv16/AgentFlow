@@ -1,12 +1,51 @@
 // In frontend/common/src/components/ui/MarkdownCodeBlock.tsx
 import React from 'react';
-// It's crucial to import the type correctly. If this specific path doesn't work,
-// check the installed react-markdown version's structure.
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Ensure this style is appropriate or adjust as needed for the project's theme
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Using VSC Dark Plus theme
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
+import c from 'react-syntax-highlighter/dist/esm/languages/prism/c';
+import cpp from 'react-syntax-highlighter/dist/esm/languages/prism/cpp';
+import csharp from 'react-syntax-highlighter/dist/esm/languages/prism/csharp';
+import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
+import diff from 'react-syntax-highlighter/dist/esm/languages/prism/diff';
+import go from 'react-syntax-highlighter/dist/esm/languages/prism/go';
+import java from 'react-syntax-highlighter/dist/esm/languages/prism/java';
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
+import markdown from 'react-syntax-highlighter/dist/esm/languages/prism/markdown';
+import markup from 'react-syntax-highlighter/dist/esm/languages/prism/markup';
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
+import rust from 'react-syntax-highlighter/dist/esm/languages/prism/rust';
+import sql from 'react-syntax-highlighter/dist/esm/languages/prism/sql';
+import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
+import yaml from 'react-syntax-highlighter/dist/esm/languages/prism/yaml';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-// Note: this any is a work around for some package conflicts; I recommend we clean this up
+[
+  ['bash', bash],
+  ['c', c],
+  ['cpp', cpp],
+  ['csharp', csharp],
+  ['css', css],
+  ['diff', diff],
+  ['go', go],
+  ['java', java],
+  ['javascript', javascript],
+  ['json', json],
+  ['jsx', jsx],
+  ['markdown', markdown],
+  ['markup', markup],
+  ['python', python],
+  ['rust', rust],
+  ['sql', sql],
+  ['tsx', tsx],
+  ['typescript', typescript],
+  ['yaml', yaml],
+].forEach(([name, language]) => {
+  SyntaxHighlighter.registerLanguage(name as string, language);
+});
+
 export const MarkdownCodeBlock: React.FC<any> = ({ node, inline, className, children, ...props }) => {
   // 1. Robustly extract the code string
   let codeString = '';

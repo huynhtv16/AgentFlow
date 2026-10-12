@@ -1,16 +1,16 @@
 
 import React from 'react';
-import { BookText, ChevronDown, ChevronUp } from 'lucide-react';
+import { BookText } from 'lucide-react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Using a common style, adjust if needed
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { Trajectory } from '../../models/trajectory';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { CopyToClipboardButton } from '../ui/CopyToClipboardButton'; // Import the button
+import { MarkdownCodeBlock } from '../ui/MarkdownCodeBlock';
+
+const markdownComponents: Components = { code: MarkdownCodeBlock };
 
 interface ResearchNotesTrajectoryProps {
   trajectory: Trajectory;
@@ -26,37 +26,6 @@ export const ResearchNotesTrajectory: React.FC<ResearchNotesTrajectoryProps> = (
   const formattedTime = created
     ? new Date(created).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : 'Invalid Date';
-
-  // Custom components for ReactMarkdown
-  const components: Components = {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      code({ className, children, ...props }) { // Removed node and inline destructuring
-        const match = /language-(\w+)/.exec(className || '');
-        const codeString = String(children).replace(/\n$/, ''); // Ensure children is a string
-
-        // Check only for match to determine if it's a highlighted block
-        if (match) {
-          // For block code with language
-          return (
-            <SyntaxHighlighter
-              style={vscDarkPlus}
-              language={match[1]}
-              PreTag="div"
-            >
-              {codeString}
-            </SyntaxHighlighter>
-          );
-        } else {
-          // For inline code or block code without language
-          return (
-            <code className={className}>
-              {children}
-            </code>
-          );
-        }
-      },
-    }
-
 
   return (
     <Card className="mb-4">
@@ -88,7 +57,7 @@ export const ResearchNotesTrajectory: React.FC<ResearchNotesTrajectoryProps> = (
               <ReactMarkdown
                 // className prop removed from ReactMarkdown component itself
                 remarkPlugins={[remarkGfm]}
-                components={components} // Use the defined custom components
+                components={markdownComponents}
               >
                 {notes}
               </ReactMarkdown>
