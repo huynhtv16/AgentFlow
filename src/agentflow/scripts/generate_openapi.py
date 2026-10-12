@@ -14,5 +14,5 @@ from agentflow.server.server import app  # Adjust if necessary
 # Generate OpenAPI schema
 openapi_spec = app.openapi()
 
-# Print OpenAPI spec as yaml
-print(yaml.dump(openapi_spec, indent=2))
+# Print OpenAPI spec as YAML without adding a second trailing newline.
+sys.stdout.write(yaml.dump(openapi_spec, indent=2))

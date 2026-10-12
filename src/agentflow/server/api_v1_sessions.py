@@ -294,6 +294,9 @@ async def get_session_trajectories(
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Kill session",
     description="Kill a session by ID",
+    responses={
+        status.HTTP_409_CONFLICT: {"description": "Session is not running"},
+    },
 )
 async def delete_session(
     session_id: int,
@@ -320,7 +323,7 @@ async def delete_session(
 
     if not is_agent_running(session_id):
         raise HTTPException(
-            status_code=status.HTTP_418_IM_A_TEAPOT,
+            status_code=status.HTTP_409_CONFLICT,
             detail=f"No running agent thread found for session {session_id}"
         )
 

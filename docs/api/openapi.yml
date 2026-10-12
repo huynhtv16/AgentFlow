@@ -380,6 +380,8 @@ paths:
           description: Successful Response
         '404':
           description: Session not found
+        '409':
+          description: Session is not running
         '422':
           description: Validation error
         '500':

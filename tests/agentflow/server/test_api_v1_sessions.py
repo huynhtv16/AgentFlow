@@ -273,3 +273,14 @@ def test_delete_session_not_found(client, mock_repo):
     assert response.status_code == 404
     assert "not found" in response.json()["detail"]
     mock_repo.get.assert_called_once_with(999)
+
+
+def test_delete_session_not_running(client, mock_repo, mock_session):
+    mock_repo.get.return_value = mock_session
+
+    with patch("agentflow.server.api_v1_sessions.is_agent_running", return_value=False):
+        response = client.delete("/v1/session/1")
+
+    assert response.status_code == 409
+    assert response.json()["detail"] == "No running agent thread found for session 1"
+    mock_repo.update_session_status.assert_not_called()
