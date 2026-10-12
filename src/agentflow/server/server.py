@@ -29,6 +29,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
+from agentflow.__version__ import __version__
 from agentflow.server.api_v1_sessions import router as sessions_router
 from agentflow.server.api_v1_spawn_agent import router as spawn_agent_router
 from agentflow.server.connection_manager import ConnectionManager
@@ -108,7 +109,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(
     title="AgentFlow API",
     description="API for AgentFlow - AI Programming Assistant",
-    version="1.0.0",
+    version=__version__,
     lifespan=lifespan,
 )
 
@@ -132,6 +133,16 @@ if ASSETS_DIR.exists() and ASSETS_DIR.is_dir():
     app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
 else:
     logger.warning(f"Assets directory not found or not a directory, skipping mount: {ASSETS_DIR}")
+
+
+@app.get(
+    "/health",
+    tags=["system"],
+    summary="Check service health",
+    description="Return process liveness and the running AgentFlow version.",
+)
+async def get_health() -> dict[str, str]:
+    return {"status": "ok", "version": __version__}
 
 @app.websocket("/v1/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -189,7 +200,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="AgentFlow API",
         summary="AgentFlow API OpenAPI Spec",
-        version="1.0.0",
+        version=__version__,
         description="AgentFlow's API provides REST endpoints for managing sessions and agents, and a WebSocket endpoint (/v1/ws) for real-time communication of events like new trajectories. The root endpoint serves the static web UI if available.",
         routes=app.routes,
         license_info={

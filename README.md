@@ -159,6 +159,8 @@ Sau đó truy cập [http://127.0.0.1:8000](http://127.0.0.1:8000). Bản fronte
 
 Mặc định server chỉ lắng nghe trên `127.0.0.1:1818`. Chỉ dùng `--server-host 0.0.0.0` khi bạn chủ động muốn cho phép thiết bị khác truy cập và đã cấu hình firewall hoặc reverse proxy phù hợp.
 
+Endpoint `GET /health` trả về trạng thái sống và phiên bản AgentFlow, phù hợp cho health check của container hoặc reverse proxy.
+
 Để phát triển frontend với hot reload:
 
 ```bash

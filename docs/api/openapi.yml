@@ -7,7 +7,8 @@ components:
       properties:
         metadata:
           anyOf:
-          - type: object
+          - additionalProperties: true
+            type: object
           - type: 'null'
           description: Optional dictionary of additional metadata to store with the
             session
@@ -52,7 +53,8 @@ components:
         \ the program\n    machine_info: Dictionary containing machine-specific metadata\n\
         \    status: The current lifecycle state of the session (e.g., 'pending',\
         \ 'running', 'completed', 'error', 'halting', 'halted')\n    display_name:\
-        \ Display name for the session (derived from human input or command line)"
+        \ Display name for the session (derived from human input or command line)\n\
+        \    plan: The execution plan for the session"
       properties:
         command_line:
           anyOf:
@@ -78,6 +80,11 @@ components:
           - type: string
           - type: 'null'
           title: Machine Info
+        plan:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan
         program_version:
           anyOf:
           - type: string
@@ -251,7 +258,7 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   summary: AgentFlow API OpenAPI Spec
   title: AgentFlow API
-  version: 1.0.0
+  version: 0.30.2
 openapi: 3.1.0
 paths:
   /:
@@ -271,6 +278,23 @@ paths:
               schema: {}
           description: Successful Response
       summary: Get Config Endpoint
+  /health:
+    get:
+      description: Return process liveness and the running AgentFlow version.
+      operationId: get_health_health_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Get Health Health Get
+                type: object
+          description: Successful Response
+      summary: Check service health
+      tags:
+      - system
   /v1/session:
     get:
       description: Get a paginated list of sessions

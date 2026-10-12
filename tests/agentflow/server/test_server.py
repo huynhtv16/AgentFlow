@@ -10,6 +10,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from agentflow.server.server import app
+from agentflow.__version__ import __version__
 from agentflow.database.repositories.session_repository import session_repo_var
 
 
@@ -44,6 +45,13 @@ def test_config_endpoint(client):
     assert "port" in response.json()
 
 
+def test_health_endpoint(client):
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "version": __version__}
+
+
 def test_websocket_heartbeat():
     """The server responds to the browser heartbeat without broadcasting it."""
     with TestClient(app) as websocket_client:
@@ -63,6 +71,8 @@ def test_api_documentation(client):
     # Check that the sessions API paths are included
     assert "/v1/session" in openapi_spec["paths"]
     assert "/v1/session/{session_id}" in openapi_spec["paths"]
+    assert "/health" in openapi_spec["paths"]
+    assert openapi_spec["info"]["version"] == __version__
     
     # Verify that sessions API operations are documented
     assert "get" in openapi_spec["paths"]["/v1/session"]
