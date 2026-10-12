@@ -486,8 +486,8 @@ def parse_arguments(args=None):
     parser.add_argument(
         "--server-host",
         type=str,
-        default="0.0.0.0",
-        help="Host to listen on for web interface (default: 0.0.0.0)",
+        default="127.0.0.1",
+        help="Host to listen on for web interface (default: 127.0.0.1)",
     )
     parser.add_argument(
         "--server-port",

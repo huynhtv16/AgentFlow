@@ -329,6 +329,23 @@ def test_missing_message():
     assert args.message == "test"
 
 
+def test_server_bind_defaults_to_loopback():
+    """The unauthenticated web API should not be exposed to the network by default."""
+    args = parse_arguments(["--server"])
+
+    assert args.server_host == "127.0.0.1"
+    assert args.server_port == 1818
+
+
+def test_server_bind_can_be_explicitly_exposed():
+    args = parse_arguments(
+        ["--server", "--server-host", "0.0.0.0", "--server-port", "8000"]
+    )
+
+    assert args.server_host == "0.0.0.0"
+    assert args.server_port == 8000
+
+
 def test_msg_file_argument(tmp_path):
     """Test --msg-file argument handling."""
     # Create a test file

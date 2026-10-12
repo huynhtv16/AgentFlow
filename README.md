@@ -157,6 +157,8 @@ uv run agentflow --server --server-host 127.0.0.1 --server-port 8000
 
 Sau đó truy cập [http://127.0.0.1:8000](http://127.0.0.1:8000). Bản frontend production đã được đóng gói sẵn trong Python package.
 
+Mặc định server chỉ lắng nghe trên `127.0.0.1:1818`. Chỉ dùng `--server-host 0.0.0.0` khi bạn chủ động muốn cho phép thiết bị khác truy cập và đã cấu hình firewall hoặc reverse proxy phù hợp.
+
 Để phát triển frontend với hot reload:
 
 ```bash
